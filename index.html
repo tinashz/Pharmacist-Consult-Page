@@ -318,12 +318,12 @@
         <p class="instruction-text">WRITE YOUR QUESTION IN THE<br>BOX BELOW</p>
         
         <div class="form-container">
-            <form id="questionForm" action="https://formsubmit.co/tina@robo-rx.com" method="POST">
+            <form id="questionForm" action="https://formsubmit.co/tina@robo-rx.com" method="POST" onsubmit="showThankYou(event)">
                 <!-- FormSubmit Configuration -->
                 <input type="hidden" name="_subject" value="New Pharmacist Question Submission">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_next" value="https://pharmacist-consultation.onrender.com">
+                <input type="hidden" name="_next" value="https://pharmacist-consultation.onrender.com/thank-you.html">
                 
                 <!-- User Type (hidden field populated by JavaScript) -->
                 <input type="hidden" name="User_Type" id="hiddenUserType">
@@ -342,6 +342,16 @@
                     <button type="submit" class="submit-button">SUBMIT</button>
                 </div>
             </form>
+        </div>
+
+        <!-- Thank You Message (hidden initially) -->
+        <div class="thank-you-message" id="thankYouMessage" style="display: none;">
+            <div class="check-icon">✓</div>
+            <h2>Thank You!</h2>
+            <p>Your question has been submitted successfully.</p>
+            <p><strong>A licensed pharmacist will answer you within the next hour.</strong></p>
+            <p>Please check your email for our response.</p>
+            <button class="submit-button" onclick="resetForm()" style="margin-top: 20px;">Submit Another Question</button>
         </div>
     </section>
 
@@ -462,11 +472,66 @@
             }
         }
 
-        // Handle form submission - simplified since FormSubmit handles the actual sending
-        function submitForm(event) {
-            // Let the form submit naturally to FormSubmit
-            // The form will redirect back to your site after submission
-            return true;
+        // Handle form submission - show thank you message on same page
+        function showThankYou(event) {
+            try {
+                // Hide the form
+                const formContainer = document.querySelector('.form-container');
+                const thankYouMessage = document.getElementById('thankYouMessage');
+                
+                if (formContainer && thankYouMessage) {
+                    formContainer.style.display = 'none';
+                    thankYouMessage.style.display = 'block';
+                    
+                    // Scroll to thank you message
+                    thankYouMessage.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                // Let the form submit to FormSubmit in the background
+                return true;
+            } catch (e) {
+                console.log('Error showing thank you message:', e);
+                return true; // Still allow form submission
+            }
+        }
+
+        // Reset form function
+        function resetForm() {
+            try {
+                // Show form again
+                const formContainer = document.querySelector('.form-container');
+                const thankYouMessage = document.getElementById('thankYouMessage');
+                
+                if (formContainer && thankYouMessage) {
+                    formContainer.style.display = 'block';
+                    thankYouMessage.style.display = 'none';
+                }
+                
+                // Reset form data
+                const form = document.getElementById('questionForm');
+                if (form) {
+                    form.reset();
+                }
+                
+                // Reset user data and hide sections
+                userData = { userType: '', otherType: '' };
+                
+                const sectionsToHide = ['userTypeSection', 'questionSection', 'legalText'];
+                sectionsToHide.forEach(function(sectionId) {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                // Scroll back to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+            } catch (e) {
+                console.log('Error resetting form:', e);
+                // Fallback: just reload the page
+                window.location.reload();
+            }
         }
     </script>
 </body>
