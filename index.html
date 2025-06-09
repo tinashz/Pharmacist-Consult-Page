@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Pharmacist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f0f0f0" width="1200" height="600"/><circle fill="%23fff" cx="200" cy="300" r="80" opacity="0.1"/><circle fill="%23fff" cx="1000" cy="200" r="60" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.8;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+
+        .cta-button {
+            background: #FFD700;
+            color: #333;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            background: #FFC700;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* User Type Section */
+        .user-type-section {
+            background: #2c2c2c;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 50px;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
+        .user-options {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .user-option {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-option:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .user-option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.5);
+            accent-color: #FFD700;
+        }
+
+        .other-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 1rem;
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            background: #444;
+            color: white;
+            display: none;
+        }
+
+        .other-input:focus {
+            outline: none;
+            border-color: #FFC700;
+        }
+
+        .submit-button {
+            background: #FFD700;
+            color: #333;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: #FFC700;
+            transform: translateY(-2px);
+        }
+
+        /* Question Form Section */
+        .question-section {
+            background: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .warning-text {
+            font-size: 2.5rem;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .instruction-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 150px;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .form-group input[type="email"] {
+            width: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        /* Legal Text */
+        .legal-text {
+            background: #f5f5f5;
+            padding: 40px 20px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #666;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .user-option {
+                font-size: 1.2rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-group input[type="email"] {
+                width: 100%;
+            }
+
+            .warning-text {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Hide sections initially */
+        .user-type-section,
+        .question-section,
+        .legal-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>HAVE A<br>QUESTION FOR<br>A PHARMACIST?</h1>
+            <button class="cta-button" onclick="showUserTypeSection()">CLICK HERE</button>
+        </div>
+    </section>
+
+    <!-- User Type Selection -->
+    <section class="user-type-section" id="userTypeSection">
+        <h2 class="section-title">I AM A</h2>
+        <div class="user-options">
+            <div class="user-option">
+                <input type="radio" name="userType" value="prescriber" id="prescriber">
+                <label for="prescriber">Prescriber</label>
+            </div>
+            <div class="user-option">
+                <input type="radio" name="userType" value="nurse" id="nurse">
+                <label for="nurse">Nurse</label>
+            </div>
+            <div class="user-option">
+                <input type="radio" name="userType" value="other" id="other">
+                <label for="other">Other - Type here</label>
+                <input type="text" class="other-input" id="otherInput" placeholder="Please specify...">
+            </div>
+        </div>
+        <button class="submit-button" onclick="showQuestionSection()">SUBMIT</button>
+    </section>
+
+    <!-- Question Form -->
+    <section class="question-section" id="questionSection">
+        <h2 class="warning-text">DO NOT INCLUDE PHI*</h2>
+        <p class="instruction-text">WRITE YOUR QUESTION IN THE<br>BOX BELOW</p>
+        
+        <div class="form-container">
+            <form id="questionForm" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label for="question">QUESTION:</label>
+                    <textarea id="question" name="question" required placeholder="Type your question here..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">EMAIL ADDRESS:</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+                    <button type="submit" class="submit-button">SUBMIT</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Legal Text -->
+    <section class="legal-text" id="legalText">
+        <p><strong>PHI STANDS FOR PROTECTED HEALTH INFORMATION.</strong> IT REFERS TO ANY INDIVIDUALLY IDENTIFIABLE HEALTH INFORMATION THAT IS CREATED, USED, OR DISCLOSED BY A HEALTHCARE PROVIDER OR OTHER COVERED ENTITY UNDER THE HEALTH INSURANCE PORTABILITY AND ACCOUNTABILITY ACT (HIPAA).</p>
+        <br>
+        <p><strong>PHI INCLUDES:</strong> NAME, ADDRESS, PHONE NUMBER, EMAIL ADDRESS, DATE OF BIRTH, SOCIAL SECURITY NUMBER, PATIENT INFORMATION</p>
+    </section>
+
+    <script>
+        // Global variables to store user data
+        let userData = {
+            userType: '',
+            otherType: ''
+        };
+
+        // Show user type selection section
+        function showUserTypeSection() {
+            try {
+                const section = document.getElementById('userTypeSection');
+                if (section) {
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            } catch (e) {
+                console.log('Error showing user type section:', e);
+            }
+        }
+
+        // Initialize event listeners when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Handle "Other" option
+                const otherRadio = document.getElementById('other');
+                const otherInput = document.getElementById('otherInput');
+                
+                if (otherRadio && otherInput) {
+                    otherRadio.addEventListener('change', function() {
+                        if (this.checked) {
+                            otherInput.style.display = 'block';
+                            otherInput.focus();
+                        }
+                    });
+                }
+
+                // Handle other radio buttons
+                const otherRadios = document.querySelectorAll('input[name="userType"]:not(#other)');
+                otherRadios.forEach(function(radio) {
+                    radio.addEventListener('change', function() {
+                        if (otherInput) {
+                            otherInput.style.display = 'none';
+                            otherInput.value = '';
+                        }
+                    });
+                });
+            } catch (e) {
+                console.log('Error setting up event listeners:', e);
+            }
+        });
+
+        // Show question section
+        function showQuestionSection() {
+            try {
+                const selectedUserType = document.querySelector('input[name="userType"]:checked');
+                
+                if (!selectedUserType) {
+                    alert('Please select your user type to continue.');
+                    return false;
+                }
+
+                // Check if "other" is selected and has value
+                if (selectedUserType.value === 'other') {
+                    const otherInput = document.getElementById('otherInput');
+                    if (!otherInput || !otherInput.value.trim()) {
+                        alert('Please specify your role in the "Other" field.');
+                        if (otherInput) otherInput.focus();
+                        return false;
+                    }
+                    userData.otherType = otherInput.value.trim();
+                }
+
+                // Store user type
+                userData.userType = selectedUserType.value;
+
+                // Show remaining sections
+                const sections = ['questionSection', 'legalText'];
+                sections.forEach(function(sectionId) {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'block';
+                    }
+                });
+                
+                // Scroll to question section
+                const questionSection = document.getElementById('questionSection');
+                if (questionSection) {
+                    questionSection.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                return true;
+            } catch (e) {
+                console.log('Error showing question section:', e);
+                alert('An error occurred. Please try again.');
+                return false;
+            }
+        }
+
+        // Handle form submission
+        function submitForm(event) {
+            try {
+                event.preventDefault();
+                
+                const questionEl = document.getElementById('question');
+                const emailEl = document.getElementById('email');
+                
+                if (!questionEl || !emailEl) {
+                    alert('Form elements not found. Please refresh the page.');
+                    return false;
+                }
+
+                const question = questionEl.value.trim();
+                const email = emailEl.value.trim();
+                
+                if (!question) {
+                    alert('Please enter your question.');
+                    questionEl.focus();
+                    return false;
+                }
+                
+                if (!email) {
+                    alert('Please enter your email address.');
+                    emailEl.focus();
+                    return false;
+                }
+                
+                // Create form data object
+                const formData = {
+                    userType: userData.userType,
+                    otherType: userData.otherType,
+                    question: question,
+                    email: email,
+                    timestamp: new Date().toISOString()
+                };
+                
+                console.log('Form submitted:', formData);
+                
+                // Show confirmation message
+                alert('Thank you for your question! A licensed pharmacist will review your inquiry and respond via email within 24-48 hours.');
+                
+                // Reset form
+                const form = document.getElementById('questionForm');
+                if (form) {
+                    form.reset();
+                }
+                
+                // Reset user data
+                userData = { userType: '', otherType: '' };
+                
+                // Scroll back to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Reset sections after delay
+                setTimeout(function() {
+                    const sectionsToHide = ['userTypeSection', 'questionSection', 'legalText'];
+                    sectionsToHide.forEach(function(sectionId) {
+                        const section = document.getElementById(sectionId);
+                        if (section) {
+                            section.style.display = 'none';
+                        }
+                    });
+                }, 3000);
+                
+                return false;
+            } catch (e) {
+                console.log('Error submitting form:', e);
+                alert('An error occurred while submitting your question. Please try again.');
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
