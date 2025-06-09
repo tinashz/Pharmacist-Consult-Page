@@ -318,16 +318,26 @@
         <p class="instruction-text">WRITE YOUR QUESTION IN THE<br>BOX BELOW</p>
         
         <div class="form-container">
-            <form id="questionForm" onsubmit="submitForm(event)">
+            <form id="questionForm" action="https://formsubmit.co/tina@robo-rx.com" method="POST">
+                <!-- FormSubmit Configuration -->
+                <input type="hidden" name="_subject" value="New Pharmacist Question Submission">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="https://pharmacist-consultation.onrender.com">
+                
+                <!-- User Type (hidden field populated by JavaScript) -->
+                <input type="hidden" name="User_Type" id="hiddenUserType">
+                <input type="hidden" name="Other_Specification" id="hiddenOtherType">
+                
                 <div class="form-group">
                     <label for="question">QUESTION:</label>
-                    <textarea id="question" name="question" required placeholder="Type your question here..."></textarea>
+                    <textarea id="question" name="Question" required placeholder="Type your question here..."></textarea>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">EMAIL ADDRESS:</label>
-                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                        <input type="email" id="email" name="Email_Address" required placeholder="your.email@example.com">
                     </div>
                     <button type="submit" class="submit-button">SUBMIT</button>
                 </div>
@@ -417,6 +427,18 @@
                 // Store user type
                 userData.userType = selectedUserType.value;
 
+                // Populate hidden form fields
+                const hiddenUserType = document.getElementById('hiddenUserType');
+                const hiddenOtherType = document.getElementById('hiddenOtherType');
+                
+                if (hiddenUserType) {
+                    hiddenUserType.value = userData.userType;
+                }
+                
+                if (hiddenOtherType) {
+                    hiddenOtherType.value = userData.otherType || '';
+                }
+
                 // Show remaining sections
                 const sections = ['questionSection', 'legalText'];
                 sections.forEach(function(sectionId) {
@@ -440,77 +462,11 @@
             }
         }
 
-        // Handle form submission
+        // Handle form submission - simplified since FormSubmit handles the actual sending
         function submitForm(event) {
-            try {
-                event.preventDefault();
-                
-                const questionEl = document.getElementById('question');
-                const emailEl = document.getElementById('email');
-                
-                if (!questionEl || !emailEl) {
-                    alert('Form elements not found. Please refresh the page.');
-                    return false;
-                }
-
-                const question = questionEl.value.trim();
-                const email = emailEl.value.trim();
-                
-                if (!question) {
-                    alert('Please enter your question.');
-                    questionEl.focus();
-                    return false;
-                }
-                
-                if (!email) {
-                    alert('Please enter your email address.');
-                    emailEl.focus();
-                    return false;
-                }
-                
-                // Create form data object
-                const formData = {
-                    userType: userData.userType,
-                    otherType: userData.otherType,
-                    question: question,
-                    email: email,
-                    timestamp: new Date().toISOString()
-                };
-                
-                console.log('Form submitted:', formData);
-                
-                // Show confirmation message
-                alert('Thank you for your question! A licensed pharmacist will review your inquiry and respond via email within 24-48 hours.');
-                
-                // Reset form
-                const form = document.getElementById('questionForm');
-                if (form) {
-                    form.reset();
-                }
-                
-                // Reset user data
-                userData = { userType: '', otherType: '' };
-                
-                // Scroll back to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // Reset sections after delay
-                setTimeout(function() {
-                    const sectionsToHide = ['userTypeSection', 'questionSection', 'legalText'];
-                    sectionsToHide.forEach(function(sectionId) {
-                        const section = document.getElementById(sectionId);
-                        if (section) {
-                            section.style.display = 'none';
-                        }
-                    });
-                }, 3000);
-                
-                return false;
-            } catch (e) {
-                console.log('Error submitting form:', e);
-                alert('An error occurred while submitting your question. Please try again.');
-                return false;
-            }
+            // Let the form submit naturally to FormSubmit
+            // The form will redirect back to your site after submission
+            return true;
         }
     </script>
 </body>
